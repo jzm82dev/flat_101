@@ -3,3 +3,40 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+
+# route to list all product
+list_products:
+  path: /api/products
+  controller: App\Controller\ProductController::listProduct
+  methods: [GET]
+
+# Route to create a new product
+create_product:
+  path: /api/products
+  controller: App\Controller\ProductController::createProduct
+  methods: [POST]
+
+# Route to create a new product
+create_product_automatically:
+  path: /api/products_automatically
+  controller: App\Controller\ProductController::createProductAutomatically
+  methods: [POST]
+
+# Route to show a new product
+show_product:
+  path: api/products/{id}
+  controller: App\Controller\ProductController::showProduct
+  methods: [GET]
+
+# Route to update a product
+update_product:
+  path: api/products/{id}
+  controller: App\Controller\ProductController::updateProduct
+  methods: [PUT] 
+
+# Route to delete a product
+delete_product:
+  path: api/products/{id}
+  controller: App\Controller\ProductController::deleteProduct
+  methods: [DELETE] 
