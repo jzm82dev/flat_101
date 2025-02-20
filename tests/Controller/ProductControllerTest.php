@@ -14,6 +14,7 @@ final class ProductControllerTest extends WebTestCase
         self::bootKernel();
         $entityManager = self::getContainer()->get('doctrine')->getManager();
 
+        // Create and save product
         $product = new Product();
         $product->setName('Boli');
         $product->setPrice(1.60);
@@ -24,7 +25,7 @@ final class ProductControllerTest extends WebTestCase
         $productRepository = $entityManager->getRepository(Product::class);
         $savedProduct = $productRepository->findOneBy(['name' => 'Boli']);
 
-        // Verificar que se guardó correctamente
+        // Check product saved correctly
         $this->assertNotNull($savedProduct);
         $this->assertSame('Boli', $savedProduct->getName());
         $this->assertSame(1.60, $savedProduct->getPrice());
@@ -37,24 +38,24 @@ final class ProductControllerTest extends WebTestCase
         self::bootKernel();
         $entityManager = self::getContainer()->get('doctrine')->getManager();
 
-        // Crear y guardar un producto
+        // Create and save product
         $product = new Product();
         $product->setName('Gafas');
         $product->setPrice(135.90);;
         $entityManager->persist($product);
         $entityManager->flush();
 
-        // Recuperar el usuario y verificar que existe
-        $userRepository = $entityManager->getRepository(Product::class);
-        $savedProduct = $userRepository->findOneBy(['name' => 'Gafas']);
+        // Get product of database and check exits it
+        $productRepository = $entityManager->getRepository(Product::class);
+        $savedProduct = $productRepository->findOneBy(['name' => 'Gafas']);
         $this->assertNotNull($savedProduct);
 
-        // Eliminar el usuario
+        // Remove product
         $entityManager->remove($savedProduct);
         $entityManager->flush();
 
-        // Verificar que ya no existe en la base de datos
-        $deletedProduct = $userRepository->findOneBy(['name' => 'Gafas']);
+        // Check product not exists in database
+        $deletedProduct = $productRepository->findOneBy(['name' => 'Gafas']);
         $this->assertNull($deletedProduct);
     }
 
@@ -63,26 +64,27 @@ final class ProductControllerTest extends WebTestCase
         self::bootKernel();
         $entityManager = self::getContainer()->get('doctrine')->getManager();
 
-        // Crear y guardar un producto
+        // Create and save product
         $product = new Product();
         $product->setName('Martillo');
         $product->setPrice(20.90);;
         $entityManager->persist($product);
         $entityManager->flush();
 
-        // Recuperar el usuario desde la base de datos
+         // Get product of database
         $productRepository = $entityManager->getRepository(Product::class);
         $savedProduct = $productRepository->findOneBy(['name' => 'Martillo']);
         $this->assertNotNull($savedProduct);
 
-        // Actualizar el nombre del usuario
+        // Update name of product
         $savedProduct->setName('Destornillador');
+        $savedProduct->setPrice('7.77');
         $entityManager->flush();
 
-        // Recuperar nuevamente el usuario actualizado
+        // Get product updated 
         $updatedProduct = $productRepository->findOneBy(['name' => 'Destornillador']);
 
-        // Verificar que el nombre se haya actualizado correctamente
+        // Check product updated correctly
         $this->assertNotNull($updatedProduct);
         $this->assertSame('Destornillador', $updatedProduct->getName());
     }
