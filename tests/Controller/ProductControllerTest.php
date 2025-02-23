@@ -41,7 +41,8 @@ final class ProductControllerTest extends WebTestCase
         // Create and save product
         $product = new Product();
         $product->setName('Gafas');
-        $product->setPrice(135.90);;
+        $product->setPrice(135.90);
+        $product->setUpdatedAt(new \DateTimeImmutable());
         $entityManager->persist($product);
         $entityManager->flush();
 
@@ -68,6 +69,7 @@ final class ProductControllerTest extends WebTestCase
         $product = new Product();
         $product->setName('Martillo');
         $product->setPrice(20.90);;
+        
         $entityManager->persist($product);
         $entityManager->flush();
 
