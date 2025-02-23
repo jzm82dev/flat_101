@@ -32,6 +32,7 @@ final class ProductController extends AbstractController
                 'id' => $product->getId(),
                 'name' => $product->getName(),
                 'price' => $product->getPrice(),
+                'updated_at' =>  $product->getUpdatedAt() ? $product->getUpdatedAt()->format('Y-m-d H:i:s') : '',
                 'created_at' => $product->getCreatedAt()->format('Y-m-d H:i:s'),
             ];
         }, $products);
@@ -52,7 +53,8 @@ final class ProductController extends AbstractController
          // Create DTO
          $productDTO = new ProductDTO(
             $data['name'] ?? '',
-            (float) ($data['price'] ?? 0)
+            (float) ($data['price'] ?? 0),
+            $data['updated_at'] ?? new \DateTimeImmutable()
         );
 
         // Validate DTO
@@ -74,6 +76,7 @@ final class ProductController extends AbstractController
         $product = new Product();
         $product->setName($productDTO->name);
         $product->setPrice($productDTO->price);
+        $product->setUpdatedAt($productDTO->updated_at);
 
 
         $entityManager->persist($product);
@@ -85,6 +88,7 @@ final class ProductController extends AbstractController
                 'id' => $product->getId(),
                 'name' => $product->getName(),
                 'price' => $product->getPrice(),
+                'updated_at' => $product->getUpdatedAt()->format('Y-m-d H:i:s'),
                 'created_at' => $product->getCreatedAt()->format('Y-m-d H:i:s'),
             ]
         ], 201);
@@ -114,7 +118,16 @@ final class ProductController extends AbstractController
             return new Response('Product not found', 404);
         }
 
-        return new Response('Product: ' . $product->getName() . ' - Price: ' . $product->getPrice() . '€');
+        return $this->json([
+            'message' => 'Product:',
+            'product' => [
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'price' => $product->getPrice(),
+                'updated_at' =>  $product->getUpdatedAt() ? $product->getUpdatedAt()->format('Y-m-d H:i:s') : '',
+                'created_at' => $product->getCreatedAt()->format('Y-m-d H:i:s'),
+            ]
+        ], 201);      
     }
 
 
@@ -133,7 +146,8 @@ final class ProductController extends AbstractController
         // Create DTO with new values
         $productDTO = new ProductDTO(
             $data['name'] ?? $product->getName(),
-            isset($data['price']) ? (float) $data['price'] : $product->getPrice()
+            isset($data['price']) ? (float) $data['price'] : $product->getPrice(),
+            $data['updated_at'] ?? new \DateTimeImmutable()
         );
 
         // Validate DTO
@@ -155,17 +169,18 @@ final class ProductController extends AbstractController
         // Update product whit the new values
         $product->setName($productDTO->name);
         $product->setPrice($productDTO->price);
-       
+        $product->setUpdatedAt($productDTO->updated_at);
 
         // SAve changes
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'Producto actualizado',
+            'message' => 'Producto updated',
             'product' => [
                 'id' => $product->getId(),
                 'name' => $product->getName(),
                 'price' => $product->getPrice(),
+                'updated_at' => $product->getUpdatedAt()->format('Y-m-d H:i:s'),
                 'created_at' => $product->getCreatedAt()->format('Y-m-d H:i:s'),
             ]
         ]);

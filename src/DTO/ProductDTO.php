@@ -3,7 +3,7 @@
 namespace App\DTO;
 
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Validator\Constraints\Date;
 
 class ProductDTO
 {
@@ -20,9 +20,12 @@ class ProductDTO
     #[Assert\Positive(message: "The price must be greater than 0")]
     public float $price;
 
-    public function __construct(string $name, float $price)
+    public ?\DateTimeImmutable $updated_at;
+
+    public function __construct(string $name, float $price, ?\DateTimeImmutable $update_at)
     {
         $this->name = $name;
         $this->price = $price;
+        $this->updated_at = $update_at;
     }
 }
